@@ -1,7 +1,7 @@
 package telegrammrentalbot.rentbot.repo;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import telegrammrentalbot.Dto.RentObjectDto;
+import telegrammrentalbot.rentbot.dto.RentObjectDto;
 
 import java.util.List;
 

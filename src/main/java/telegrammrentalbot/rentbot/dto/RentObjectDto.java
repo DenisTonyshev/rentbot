@@ -1,4 +1,4 @@
-package telegrammrentalbot.Dto;
+package telegrammrentalbot.rentbot.dto;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

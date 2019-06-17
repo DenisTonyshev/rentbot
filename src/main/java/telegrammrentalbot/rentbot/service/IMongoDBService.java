@@ -1,6 +1,6 @@
 package telegrammrentalbot.rentbot.service;
 
-import telegrammrentalbot.Dto.RentObjectDto;
+import telegrammrentalbot.rentbot.dto.RentObjectDto;
 
 import java.util.List;
 
