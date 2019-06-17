@@ -2,8 +2,10 @@ package telegrammrentalbot.rentbot.service;
 
 import com.vdurmont.emoji.EmojiParser;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.*;
@@ -18,11 +20,11 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Component
-public class BotServiceClass extends TelegramWebhookBot implements IBotServiceInterface {
+public class BotServiceClass extends TelegramLongPollingBot implements IBotServiceInterface {
 
     @PostConstruct
-    public void registerBot(){
-        TelegramBotsApi telegramBotsApi=new TelegramBotsApi();
+    public void registerBot() {
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
             telegramBotsApi.registerBot(this);
         } catch (TelegramApiException e) {
@@ -34,7 +36,10 @@ public class BotServiceClass extends TelegramWebhookBot implements IBotServiceIn
     Map<String, String> buttonsMap = new HashMap<>();
 
     //==========================================
-
+    @Bean
+    private TelegramBotsApi getBootApi() {
+        return new TelegramBotsApi();
+    }
 
     @Value("${bot.token}")
     private String botToken;
@@ -80,24 +85,21 @@ public class BotServiceClass extends TelegramWebhookBot implements IBotServiceIn
         return -1L;
     }
 
-    //========================================================
+    //==================== Telegramm Polling methods
     @Override
-    public BotApiMethod onWebhookUpdateReceived(Update update) {
-
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            SendMessage sendMessage = new SendMessage();
-            Message message = update.getMessage();
-            if (message.getText().equals("1")) {
-                sendButtonMenu(buttonsMap, 153991281);
-                sendButtonMenu(buttonsMap, 53451645);
+    public void onUpdateReceived(Update update) {
+        String message = update.getMessage().getText();
+        if (message.equals("R")) {
+            SendMessage sendMsg = new SendMessage();
+            SendMessage a = sendMsg.setText("AAAAAAAAAAAAAA").setChatId((long) 153991281);
+            sendButtonMenu(buttonsMap, 53451645);
+            try {
+                Message msg = execute(a);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
             }
-            System.out.println(message.getText());
-//TODO ДОПИСЫВАТЬ ЛОГИКУ ОТРАБОТКИ КНОПОК И ПОИСКА ПО БД!
-            sendMessage.setChatId(update.getMessage().getChatId().toString());
-            sendMessage.setText("Well, all information looks like noise until you break the code.");
-            return sendMessage;
         }
-        return null;
+//        (update.getMessage().getChatId().toString(), message);
     }
 
     @Override
@@ -110,10 +112,8 @@ public class BotServiceClass extends TelegramWebhookBot implements IBotServiceIn
         return botToken;
     }
 
-    @Override
-    public String getBotPath() {
-        return "https://botapprent.herokuapp.com/";
-    }
+    //========================================================
+
 
     private class InlineKeyboardBuilder {
 
