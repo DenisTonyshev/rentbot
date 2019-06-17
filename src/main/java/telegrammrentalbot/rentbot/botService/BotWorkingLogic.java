@@ -10,10 +10,11 @@ import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import telegrammrentalbot.rentbot.botAbilities.*;
 import telegrammrentalbot.rentbot.constants.Menu;
+
 import javax.annotation.PostConstruct;
 
 @Component
-public class BotWorkingLogic extends TelegramLongPollingBot{
+public class BotWorkingLogic extends TelegramLongPollingBot {
 
     IBotAbilities botDo = new AbilitiesImplementation();
 
@@ -39,20 +40,22 @@ public class BotWorkingLogic extends TelegramLongPollingBot{
 
     @Override
     public void onUpdateReceived(Update update) {
-        CallbackQuery callbackQuery = update.getCallbackQuery();
-        System.out.println(callbackQuery.getData());
+        Long userId = update.getMessage().getChatId();
+        System.out.println(userId);
 
-        String message = update.getMessage().getText();
-        if (message.equals("R")) {
-            SendMessage sendMsg = new SendMessage();
-            Message msg = new Message();
-            SendMessage a = sendMsg.setText("AAAAAAAAAAAAAA").setChatId((long) 153991281);
-            try {
-                SendMessage sendMessage = botDo.sendButtonMenu(new Menu().getStartingMenu(), 153991281);
-                msg =execute(sendMessage);
-                msg = execute(a);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+        if (update.getCallbackQuery() != null) {
+            System.out.println(update.getCallbackQuery().getData());
+        } else {
+            String message = update.getMessage().getText();
+            if (message.equals("R")) {
+                SendMessage sendMsg = new SendMessage();
+                Message msg = new Message();
+                try {
+                    SendMessage sendMessage = botDo.sendButtonMenu(new Menu().getStartingMenu(), userId);
+                    msg = execute(sendMessage);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -68,7 +71,6 @@ public class BotWorkingLogic extends TelegramLongPollingBot{
     }
 
     //========================================================
-
 
 
 }
