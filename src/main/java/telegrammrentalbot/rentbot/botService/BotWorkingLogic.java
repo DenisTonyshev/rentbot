@@ -15,8 +15,9 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class BotWorkingLogic extends TelegramLongPollingBot {
-
-    IBotAbilities botDo = new AbilitiesImplementation();
+    private long currentmessageId;
+    private long chatId;
+    private IBotAbilities botDo = new AbilitiesImplementation();
 
     @PostConstruct
     private void registerBot() {
@@ -40,13 +41,14 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-            long currentmessageId = update.getMessage().getMessageId();
-            long chatId = update.getMessage().getChatId();
+
         if (update.getCallbackQuery() != null) {
             System.out.println(update.getCallbackQuery().toString());
             System.out.println(update.getCallbackQuery().getData());
-            botDo.dellMessage((int)currentmessageId,chatId);
+            botDo.dellMessage(this.currentmessageId, this.chatId);
         } else {
+            currentmessageId = update.getMessage().getMessageId();
+            chatId = update.getMessage().getChatId();
             Long userId = update.getMessage().getChatId();
             String message = update.getMessage().getText();
             if (message.equals("R")) {
