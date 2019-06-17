@@ -83,7 +83,7 @@ public class BotServiceClass extends TelegramWebhookBot implements IBotServiceIn
     //========================================================
     @Override
     public BotApiMethod onWebhookUpdateReceived(Update update) {
-        
+
         if (update.hasMessage() && update.getMessage().hasText()) {
             SendMessage sendMessage = new SendMessage();
             Message message = update.getMessage();
@@ -112,8 +112,7 @@ public class BotServiceClass extends TelegramWebhookBot implements IBotServiceIn
 
     @Override
     public String getBotPath() {
-        //TODO HEROKU ПУТЬ ВЕРНУТЬ
-        return botName;
+        return "https://botapprent.herokuapp.com/";
     }
 
     private class InlineKeyboardBuilder {
