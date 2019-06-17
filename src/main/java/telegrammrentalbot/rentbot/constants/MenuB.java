@@ -19,7 +19,14 @@ public class MenuB {
         return regionsCities;
     }
 
+    public void catchResponseFromClient(){
+
+    }
+
+
     private void addCityToMap(String region, String[] arrCity) {
         regionsCities.replace(region,null, new ArrayList<>(Arrays.asList(arrCity)));
     }
+
+
 }

@@ -2,6 +2,7 @@ package telegrammrentalbot.rentbot.botAbilities;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.*;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import telegrammrentalbot.rentbot.constants.MenuB;
 import telegrammrentalbot.rentbot.inLineBuilder.InlineKeyboardBuilder;
 import java.util.*;
@@ -14,6 +15,14 @@ MenuB menuB = new MenuB();
     @Override
     public void informAll(String text) {
 
+    }
+
+    @Override
+    public DeleteMessage dellMessage(int messageId, long chatId) {
+        DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setMessageId(messageId);
+        deleteMessage.setChatId(chatId);
+        return deleteMessage;
     }
 
     @Override

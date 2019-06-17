@@ -40,9 +40,12 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+            long currentmessageId = update.getMessage().getMessageId();
+            long chatId = update.getMessage().getChatId();
         if (update.getCallbackQuery() != null) {
             System.out.println(update.getCallbackQuery().toString());
             System.out.println(update.getCallbackQuery().getData());
+            botDo.dellMessage((int)currentmessageId,chatId);
         } else {
             Long userId = update.getMessage().getChatId();
             String message = update.getMessage().getText();
