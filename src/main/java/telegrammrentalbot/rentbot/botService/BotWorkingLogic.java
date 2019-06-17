@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.*;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import telegrammrentalbot.rentbot.botAbilities.*;
-import telegrammrentalbot.rentbot.constants.Menu;
+import telegrammrentalbot.rentbot.constants.MenuB;
 
 import javax.annotation.PostConstruct;
 
@@ -40,18 +40,17 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        Long userId = update.getMessage().getChatId();
-        System.out.println(userId);
-
         if (update.getCallbackQuery() != null) {
+            System.out.println(update.getCallbackQuery().toString());
             System.out.println(update.getCallbackQuery().getData());
         } else {
+            Long userId = update.getMessage().getChatId();
             String message = update.getMessage().getText();
             if (message.equals("R")) {
                 SendMessage sendMsg = new SendMessage();
                 Message msg = new Message();
                 try {
-                    SendMessage sendMessage = botDo.sendButtonMenu(new Menu().getStartingMenu(), userId);
+                    SendMessage sendMessage = botDo.sendButtonMenu(new MenuB().getStartingMenu(), userId);
                     msg = execute(sendMessage);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();

@@ -53,15 +53,15 @@ public class InlineKeyboardBuilder {
         return this;
     }
 
-    public InlineKeyboardBuilder rowBuilder(Map<String, String> buttons) {
+    public InlineKeyboardBuilder rowBuilder(Map<String, List<String>> buttons) {
         long i = 1;
-        Iterator<Map.Entry<String, String>> it = buttons.entrySet().iterator();
+        Iterator<Map.Entry<String, List<String>>> it = buttons.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String, String> pair = it.next();
+            Map.Entry<String,  List<String>> pair = it.next();
             if (i % 2 != 0) {
                 row();
             }
-            button(EmojiParser.parseToUnicode(pair.getKey()), EmojiParser.parseToUnicode(pair.getValue()));
+            button(EmojiParser.parseToUnicode(pair.getKey()), EmojiParser.parseToUnicode(pair.getValue().toString()));
             if (i % 2 == 0) {
                 endRow();
             }
