@@ -8,7 +8,9 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import telegrammrentalbot.rentbot.botAbilities.*;
+import telegrammrentalbot.rentbot.dto.UserDto;
 import telegrammrentalbot.rentbot.service.IMongoDBService;
+import telegrammrentalbot.rentbot.service.IMongoDBUserService;
 import telegrammrentalbot.rentbot.service.MongoDBServiceImpl;
 
 
@@ -19,7 +21,10 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
     //    private long currentmessageId;
 //    private long chatId;
     private IBotAbilities botDo = new AbilitiesImplementation();
-    private IMongoDBService dataBase = new MongoDBServiceImpl();
+    @Autowired
+    IMongoDBService dataBase;
+    @Autowired
+    IMongoDBUserService userBase;
 
 
     @PostConstruct
@@ -45,16 +50,14 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         if (message.getText().equals("/start")) {
-//            User user = new User(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
-//                    message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
-//
+            UserDto user = new UserDto(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
+                    message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
+            userBase.addUser(user);
         } else if (message.hasText())
             try {
                 switch (message.getText()) {
                     case "SAVEAD":
-                        User user = new User(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
-                                message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
-                        userBase.addUser()
+
                     case "NORTH":
                         System.out.println(message.getText());
                         execute(botDo.sendRegionMenu(message));
