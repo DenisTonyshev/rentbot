@@ -3,6 +3,7 @@ package telegrammrentalbot.rentbot.botAbilities;
 import org.telegram.telegrambots.meta.api.methods.send.*;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import telegrammrentalbot.rentbot.dto.RentObjectDto;
 
 import java.util.*;
 
@@ -17,5 +18,5 @@ public interface IBotAbilities {
 
     SendMessage sendRegionMenu(Message message);
 
-    SendMessage sendAllAds(Message message);
+    List<SendPhoto> sendAllAds(Message message, List<RentObjectDto> ads);
 }

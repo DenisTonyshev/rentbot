@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import telegrammrentalbot.rentbot.dto.RentObjectDto;
 import telegrammrentalbot.rentbot.inLineBuilder.InlineKeyboardBuilder;
 import telegrammrentalbot.rentbot.service.IMongoDBService;
 import telegrammrentalbot.rentbot.service.IMongoDBUserService;
@@ -15,6 +16,7 @@ import java.util.*;
 
 @Component
 public class AbilitiesImplementation implements IBotAbilities {
+    private HashMap<String, List<String>> mapIsr = new HashMap<>();
 
     @Autowired
     IMongoDBService dataBase;
@@ -55,6 +57,7 @@ public class AbilitiesImplementation implements IBotAbilities {
 
     @Override
     public SendMessage sendMenu(Message message) {
+        mapFiller(mapIsr);
         List<String> regions = new ArrayList<>();
         regions.add("NORTH");
         regions.add("SOUTH");
@@ -65,37 +68,21 @@ public class AbilitiesImplementation implements IBotAbilities {
 
     @Override
     public SendMessage sendRegionMenu(Message message) {
-        List<String> cities = new ArrayList<>();
-        switch (message.getText()) {
-            case "NORTH":
-                cities.add("HAIFA");
-                cities.add("AKKO");
-                cities.add("NETANYA");
-                cities.add("RAANANA");
-                cities.add("HERZLIYA");
-                cities.add("CEISARIYA");
-                cities.add("BACK TO MAIN MENU");
-                break;
-            case "SOUTH":
-                cities.add("BEER_SHEBA");
-                cities.add("ASHKELON");
-                cities.add("ASHDOD");
-                cities.add("BACK TO MAIN MENU");
-                break;
-            case "CENTER":
-                cities.add("TEL_AVIV");
-                cities.add("PETAH_TIKVA");
-                cities.add("RAMAT_GAN");
-                cities.add("BACK TO MAIN MENU");
-                break;
-        }
-        return menuConstructor(message, cities);
+        mapFiller(mapIsr);
+        return menuConstructor(message, mapIsr.get(message.getText()));
     }
 
     @Override
-    public SendMessage sendAllAds(Message message) {
-
-        return null;
+    public List<SendPhoto> sendAllAds(Message message, List<RentObjectDto> ads) {
+        List<SendPhoto> rents = new ArrayList<>();
+        SendPhoto msg = new SendPhoto();
+        for (RentObjectDto o : ads) {
+        StringBuilder sb = new StringBuilder();
+            msg.setChatId(message.getChatId()).setPhoto("https://www.moya-planeta.ru/files/holder/9c/fa/9cfa0d67456298d03c5bb93c91281da7.jpg")
+                    .setCaption(sb.append(o.getDescription()).append("\n").append(o.getAddress()).append("\n").append(o.getContacts()).toString());
+            rents.add(msg);
+        }
+        return rents;
     }
 
 
@@ -139,5 +126,15 @@ public class AbilitiesImplementation implements IBotAbilities {
 
     }
 
-//    private void
+    private void mapFiller(HashMap<String, List<String>> map) {
+        if (map.isEmpty()) {
+            map.put("SOUTH", new ArrayList<>());
+            map.put("CENTER", new ArrayList<>());
+            map.put("NORTH", new ArrayList<>());
+            map.get("SOUTH").addAll(Arrays.asList("BEER_SHEBA", "ASHDOD", "ASHKELON", "MAIN_MENU"));
+            map.get("NORTH").addAll(Arrays.asList("HAIFA", "AKKO", "NETANYA", "RAANANNA", "HERZLIA", "CEISARIA", "MAIN_MENU"));
+            map.get("CENTER").addAll(Arrays.asList("TEL_AVIV", "PETAH_TIKVA", "RAMAT_GAN", "MAIN_MENU"));
+        }
+    }
+
 }

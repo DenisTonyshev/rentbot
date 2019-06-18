@@ -1,27 +1,24 @@
 package telegrammrentalbot.rentbot.dto;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
+import java.time.*;
+import java.util.*;
 
-import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-
 public class RentObjectDto {
     @Id
     private Long id;
-    private Long userId;
+    private Integer userId;
     private String description;
     private String contacts;
     private List<String> photo;
-    private Date postDate;
+    private LocalDate postDate;
     private double price;
     private boolean isActive;
     private String address;

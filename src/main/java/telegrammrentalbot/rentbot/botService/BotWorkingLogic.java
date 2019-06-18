@@ -5,16 +5,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.*;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import telegrammrentalbot.rentbot.botAbilities.*;
-import telegrammrentalbot.rentbot.dto.UserDto;
-import telegrammrentalbot.rentbot.service.IMongoDBService;
-import telegrammrentalbot.rentbot.service.IMongoDBUserService;
-import telegrammrentalbot.rentbot.service.MongoDBServiceImpl;
-
+import telegrammrentalbot.rentbot.dto.*;
+import telegrammrentalbot.rentbot.service.*;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
+import java.util.*;
 
 @Component
 public class BotWorkingLogic extends TelegramLongPollingBot {
@@ -54,6 +54,14 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
             UserDto user = new UserDto(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
                     message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
             userBase.addUser(user);
+        }
+        if (message.getText().equals("post")) {
+            List<String> paths = new ArrayList<>();
+            paths.add("ПУТЬ К ФАЙЛУ");
+            for (int i = 0; i <9 ; i++) {
+                RentObjectDto objectDto = new RentObjectDto((long)i, message.getFrom().getId(), "TESTOVOE OBIVLENIE", "+79995552525", paths, LocalDate.now(), new Random().nextDouble()*10000,true, "Shaula melach"+i, "SOUTH");
+                dataBase.createRent(objectDto);
+            }
         } else if (message.hasText())
             try {
                 switch (message.getText()) {
@@ -69,6 +77,12 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                         System.out.println(message.getText());
                         execute(botDo.sendRegionMenu(message));
                         break;
+                    case "TEL_AVIV":
+                        List<RentObjectDto> south = dataBase.allAreaRents("SOUTH");
+                        List<SendPhoto> sendPhotos = botDo.sendAllAds(message, south);
+                        for (SendPhoto o: sendPhotos) {
+                            execute(o);
+                        }
                     default:
                         System.out.println(message.getText());
                         try {
