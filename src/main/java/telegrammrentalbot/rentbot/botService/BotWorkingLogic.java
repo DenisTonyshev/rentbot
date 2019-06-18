@@ -45,15 +45,16 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         if (message.getText().equals("/start")) {
-            User user = new User(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
-                    message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
-            if (!dataBase.contains(user)) {
-                dataBase.add(user);
-                dataBase.addUser(user);
-            }
-        } else if (message.hasText()) {
+//            User user = new User(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
+//                    message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
+//
+        } else if (message.hasText())
             try {
                 switch (message.getText()) {
+                    case "SAVEAD":
+                        User user = new User(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
+                                message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
+                        userBase.addUser()
                     case "NORTH":
                         System.out.println(message.getText());
                         execute(botDo.sendRegionMenu(message));
@@ -79,9 +80,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        }
     }
-
 
 
     @Override
