@@ -16,4 +16,28 @@ public class UserDto {
     private String lastname;
     private String userName;
     private String languageCode;
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isBot() {
+        return isBot;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
 }

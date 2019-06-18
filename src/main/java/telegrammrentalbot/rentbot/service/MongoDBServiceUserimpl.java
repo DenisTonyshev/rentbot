@@ -12,12 +12,19 @@ public class MongoDBServiceUserimpl implements IMongoDBUserService {
     MongoDBUserRepo mongoDBUserRepo;
 
     @Override
-    public boolean addUser(UserDto user) {
-        return true;
+    public void addUser(UserDto user) {
+        if (mongoDBUserRepo.existsById(user.getId())){
+            return;
+        }
+        mongoDBUserRepo.save(user);
     }
 
     @Override
-    public boolean removeUser(Long userId) {
-        return true;
+    public void removeUser(Long userId) {
+        if (mongoDBUserRepo.existsById(userId)) {
+            mongoDBUserRepo.deleteById(userId);
+            return;
+        }
+        return;
     }
 }
