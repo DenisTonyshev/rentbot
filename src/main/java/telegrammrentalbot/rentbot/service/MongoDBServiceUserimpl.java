@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import telegrammrentalbot.rentbot.dto.UserDto;
 import telegrammrentalbot.rentbot.repo.MongoDBUserRepo;
 
+import java.util.List;
+
 @Service
 public class MongoDBServiceUserimpl implements IMongoDBUserService {
 
@@ -26,5 +28,10 @@ public class MongoDBServiceUserimpl implements IMongoDBUserService {
             return;
         }
         return;
+    }
+
+    @Override
+    public List<UserDto> allUsers() {
+        return mongoDBUserRepo.findAll();
     }
 }
