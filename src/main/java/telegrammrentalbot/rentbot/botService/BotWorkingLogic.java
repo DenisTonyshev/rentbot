@@ -8,16 +8,19 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import telegrammrentalbot.rentbot.botAbilities.*;
+import telegrammrentalbot.rentbot.service.IMongoDBService;
+import telegrammrentalbot.rentbot.service.MongoDBServiceImpl;
 
 
 import javax.annotation.PostConstruct;
-
 
 @Component
 public class BotWorkingLogic extends TelegramLongPollingBot {
     //    private long currentmessageId;
 //    private long chatId;
     private IBotAbilities botDo = new AbilitiesImplementation();
+    private IMongoDBService dataBase = new MongoDBServiceImpl();
+
 
     @PostConstruct
     private void registerBot() {
@@ -41,7 +44,14 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        if (message.hasText()) {
+        if (message.getText().equals("/start")) {
+            User user = new User(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
+                    message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
+            if (!dataBase.contains(user)) {
+                dataBase.add(user);
+                dataBase.addUser(user);
+            }
+        } else if (message.hasText()) {
             try {
                 switch (message.getText()) {
                     case "NORTH":
@@ -73,6 +83,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
     }
 
 
+
     @Override
     public String getBotUsername() {
         return botName;
@@ -85,6 +96,6 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
     //========================================================
 
-
 }
+
 
