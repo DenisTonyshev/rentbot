@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,10 +20,10 @@ public class RentObjectDto {
     private Long userId;
     private String description;
     private String contacts;
-    private String photo;
+    private List<String> photo;
     private Date postDate;
     private double price;
-    private boolean inActive;
+    private boolean isActive;
     private String address;
     private String area;
 }

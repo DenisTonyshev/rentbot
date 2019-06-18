@@ -1,12 +1,13 @@
 package telegrammrentalbot.rentbot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import telegrammrentalbot.rentbot.dto.RentObjectDto;
 import telegrammrentalbot.rentbot.repo.MongoDbRepo;
 
 import java.util.List;
-
+@Service
 public class MongoDBServiceImpl implements IMongoDBService {
     @Autowired
     MongoDbRepo mongoDbRepo;
