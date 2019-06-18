@@ -59,7 +59,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
             List<String> paths = new ArrayList<>();
             paths.add("ПУТЬ К ФАЙЛУ");
             for (int i = 0; i <9 ; i++) {
-                RentObjectDto objectDto = new RentObjectDto((long)i, message.getFrom().getId(), "TESTOVOE OBIVLENIE", "+79995552525", paths, LocalDate.now(), new Random().nextDouble()*10000,true, "Shaula melach"+i, "SOUTH");
+                RentObjectDto objectDto = new RentObjectDto((long)i, message.getFrom().getId(), "TESTOVOE OBIVLENIE", "+79995552525", paths, LocalDate.now(), new Random().nextDouble()*10000,true, "Shaula melach"+i, "SOUTH","TEL_AVIV");
                 dataBase.createRent(objectDto);
             }
         } else if (message.hasText())

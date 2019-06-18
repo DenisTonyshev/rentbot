@@ -75,10 +75,10 @@ public class AbilitiesImplementation implements IBotAbilities {
     @Override
     public List<SendPhoto> sendAllAds(Message message, List<RentObjectDto> ads) {
         List<SendPhoto> rents = new ArrayList<>();
-        SendPhoto msg = new SendPhoto();
         for (RentObjectDto o : ads) {
-        StringBuilder sb = new StringBuilder();
-            msg.setChatId(message.getChatId()).setPhoto("https://www.moya-planeta.ru/files/holder/9c/fa/9cfa0d67456298d03c5bb93c91281da7.jpg")
+            SendPhoto msg = new SendPhoto();
+            StringBuilder sb = new StringBuilder();
+            msg.setChatId(message.getChatId()).setPhoto("https://vean-tattoo.com/images/Eskizy/IndiyskiySlon/Tattoo_Eskiz_Indiyskiy_Slon_3.jpg")
                     .setCaption(sb.append(o.getDescription()).append("\n").append(o.getAddress()).append("\n").append(o.getContacts()).toString());
             rents.add(msg);
         }
@@ -110,12 +110,6 @@ public class AbilitiesImplementation implements IBotAbilities {
                 keyboardSecondRow.add(name.get(i));
             }
         }
-//
-//
-//        // Добавляем кнопки в первую строчку клавиатуры
-//        keyboardFirstRow.add("NORTH");
-//        keyboardFirstRow.add("CENTER");
-//        keyboardFirstRow.add("SOUTH");
 
         // Добавляем все строчки клавиатуры в список
         keyboard.add(keyboardFirstRow);
