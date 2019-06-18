@@ -15,6 +15,7 @@ import telegrammrentalbot.rentbot.service.MongoDBServiceImpl;
 
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Component
 public class BotWorkingLogic extends TelegramLongPollingBot {
