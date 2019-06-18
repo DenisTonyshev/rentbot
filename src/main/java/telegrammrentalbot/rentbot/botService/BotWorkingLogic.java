@@ -21,6 +21,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
     //    private long currentmessageId;
 //    private long chatId;
     private IBotAbilities botDo = new AbilitiesImplementation();
+
     @Autowired
     IMongoDBService dataBase;
     @Autowired
@@ -56,8 +57,6 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
         } else if (message.hasText())
             try {
                 switch (message.getText()) {
-                    case "SAVEAD":
-
                     case "NORTH":
                         System.out.println(message.getText());
                         execute(botDo.sendRegionMenu(message));

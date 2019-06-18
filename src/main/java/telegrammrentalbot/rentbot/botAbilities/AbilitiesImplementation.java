@@ -1,5 +1,6 @@
 package telegrammrentalbot.rentbot.botAbilities;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.*;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -7,11 +8,18 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import telegrammrentalbot.rentbot.inLineBuilder.InlineKeyboardBuilder;
+import telegrammrentalbot.rentbot.service.IMongoDBService;
+import telegrammrentalbot.rentbot.service.IMongoDBUserService;
 
 import java.util.*;
 
 @Component
 public class AbilitiesImplementation implements IBotAbilities {
+
+    @Autowired
+    IMongoDBService dataBase;
+    @Autowired
+    IMongoDBUserService userBase;
 
     @Override
     public void informAll(String text) {
@@ -86,7 +94,7 @@ public class AbilitiesImplementation implements IBotAbilities {
 
     @Override
     public SendMessage sendAllAds(Message message) {
-//TODO
+
         return null;
     }
 
