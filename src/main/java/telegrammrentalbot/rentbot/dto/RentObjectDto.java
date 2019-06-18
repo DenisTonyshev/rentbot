@@ -23,4 +23,5 @@ public class RentObjectDto {
     private boolean isActive;
     private String address;
     private String area;
+    private String cityName;
 }
