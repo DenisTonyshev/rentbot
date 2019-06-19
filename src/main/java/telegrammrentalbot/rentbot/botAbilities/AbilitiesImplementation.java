@@ -112,13 +112,13 @@ public class AbilitiesImplementation implements IBotAbilities {
             SendPhoto msg = new SendPhoto();
             try {
                 //=================================TODO
-                File tatatata = Tatatata();
+//                File tatatata = Tatatata();
                 //=================================^
                 msg.setChatId(message.getChatId())
-                        .setPhoto(tatatata)
+                        .setPhoto("https://stickeroid.com/uploads/pic/full-tlgrmadd/thumb/stickeroid_5bf55072f275d.png")
                         .setCaption(buildTheStringDescription(o));
                 rents.add(msg);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
