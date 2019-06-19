@@ -5,9 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.*;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.send.*;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import telegrammrentalbot.rentbot.botAbilities.*;
@@ -18,22 +16,11 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
-import static telegrammrentalbot.rentbot.constants.consts.REGION_CENTER;
-import static telegrammrentalbot.rentbot.constants.consts.REGION_SOUTH;
+import static telegrammrentalbot.rentbot.constants.consts.*;
 
 @Component
 public class BotWorkingLogic extends TelegramLongPollingBot {
-
-    private static int countID = 0;
-    private static final Object countLock = new Object();
-
-    private void incrementCount() {
-        synchronized (countLock) {
-            countID++;
-        }
-    }
 
     private int counter = 0;
     private IBotAbilities botDo = new AbilitiesImplementation();
@@ -143,6 +130,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
         for (int i = 1; i < 11; i++) {
             RentObjectDto objectDto = new RentObjectDto();
+            objectDto.setId(clientId.getAndIncrement());
             objectDto.setUserId(message.getFrom().getId());
             objectDto.setDescription("Большая" + i + " комнатная квартира,полнoстью мебелираванная с большой обустроенной крышей");
             objectDto.setContacts("+972053" + (i - 1) + ThreadLocalRandom.current().ints(100000, 999999).findFirst().getAsInt());

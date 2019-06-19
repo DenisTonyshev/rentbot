@@ -2,8 +2,10 @@ package telegrammrentalbot.rentbot.constants;
 
 import java.util.ArrayList;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public interface consts {
+    AtomicLong clientId = new AtomicLong(0);
     String REGION_SOUTH = "SOUTH";
     String REGION_NORTH = "NORTH";
     String REGION_CENTER = "CENTER";

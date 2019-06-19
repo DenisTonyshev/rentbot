@@ -13,12 +13,11 @@ import java.util.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class RentObjectDto {
-
-
+    @Id
+    private Long id;
     private Integer userId;
     private String description;
     private String contacts;
-    @Id
     private LocalDate postDate;
     private double price;
     private boolean isActive;
