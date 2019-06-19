@@ -31,13 +31,11 @@ public class MongoDBServiceImpl implements IMongoDBService {
     }
 
     @Override
-    @Transactional
     public List<RentObjectDto> allAreaRents(String area) {
         return mongoDbRepo.findByArea(area);
     }
 
     @Override
-    @Transactional
     public List<RentObjectDto> allUserRents(long userId) {
         return mongoDbRepo.findByUserId(userId);
     }

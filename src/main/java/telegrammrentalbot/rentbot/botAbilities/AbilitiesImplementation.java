@@ -9,14 +9,23 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import telegrammrentalbot.rentbot.dto.RentObjectDto;
 import telegrammrentalbot.rentbot.inLineBuilder.InlineKeyboardBuilder;
-import telegrammrentalbot.rentbot.service.IMongoDBService;
-import telegrammrentalbot.rentbot.service.IMongoDBUserService;
+import telegrammrentalbot.rentbot.service.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
+
+import static telegrammrentalbot.rentbot.constants.consts.*;
+import static telegrammrentalbot.rentbot.repo.iAmazonS3.Tatatata;
 
 @Component
 public class AbilitiesImplementation implements IBotAbilities {
     private HashMap<String, List<String>> mapIsr = new HashMap<>();
+
+    {
+        mapFiller(mapIsr);
+    }
 
     @Autowired
     IMongoDBService dataBase;
@@ -57,19 +66,42 @@ public class AbilitiesImplementation implements IBotAbilities {
 
     @Override
     public SendMessage sendMenu(Message message) {
-        mapFiller(mapIsr);
-        List<String> regions = new ArrayList<>();
-        regions.add("NORTH");
-        regions.add("SOUTH");
-        regions.add("CENTER");
-        menuConstructor(message, regions);
-        return menuConstructor(message, regions);
+        List<String> regionsMenu = REGIONS_MENU;
+        return menuConstructor(message, regionsMenu, MAIN_MENU);
     }
 
     @Override
     public SendMessage sendRegionMenu(Message message) {
-        mapFiller(mapIsr);
-        return menuConstructor(message, mapIsr.get(message.getText()));
+        return menuConstructor(message, mapIsr.get(message.getText()), "CITIES");
+    }
+
+    @Override
+    public SendMessage fillTheRentAD(Message message) {
+//        private String description;
+//        private String contacts;
+//        private double price;
+//        private String address;
+//        private String area;
+//        private String cityName;
+//        private List<String> photo;
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(message.getChatId());
+        StringBuilder sb = new StringBuilder();
+        sb.append("Description: ")
+                .append("ТУТ ТВОЕ ОПИСАНИЕ \n")
+                .append("Contacts: ")
+                .append("ТВОЙ ТЕЛЕФОН \n")
+                .append("Price: ")
+                .append("УКАЖИ СВОЮ ЦЕНУ в ШЕКЕЛЯХ \n")
+                .append("Address: ")
+                .append("АДРЕС ГДЕ ПОСМОТРЕТЬ \n")
+                .append("Region: ")
+                .append("В КАКОМ РЕГИОНЕ(NORTH,SOUTH,CENTER) \n")
+                .append("City: ")
+                .append("В КАКОМ ГОРОДЕ \n")
+                .append("И на ПОСЛЕДОК ЕСЛИ есть ФОТО(ФОТОКОЛЛАЖ) Приложи слудующим сообщением");
+        return sendMessage.setText("НУ ДАВАЙ ПОДАДИМ ОБЬЯВЛЕНИЕ ВОТ ТЕБЕ ОБРАЗЕЦ ПОСТАРАЙСЯ ЗАПОЛНИТЬ ТАКЖЕ" + "\n" + sb);
     }
 
     @Override
@@ -77,16 +109,59 @@ public class AbilitiesImplementation implements IBotAbilities {
         List<SendPhoto> rents = new ArrayList<>();
         for (RentObjectDto o : ads) {
             SendPhoto msg = new SendPhoto();
-            StringBuilder sb = new StringBuilder();
-            msg.setChatId(message.getChatId()).setPhoto("https://vean-tattoo.com/images/Eskizy/IndiyskiySlon/Tattoo_Eskiz_Indiyskiy_Slon_3.jpg")
-                    .setCaption(sb.append(o.getDescription()).append("\n").append(o.getAddress()).append("\n").append(o.getContacts()).toString());
-            rents.add(msg);
+            try {
+                //=================================TODO
+                File tatatata = Tatatata();
+                //=================================^
+                msg.setChatId(message.getChatId())
+                        .setPhoto(tatatata)
+                        .setCaption(buildTheStringDescription(o));
+                rents.add(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return rents;
     }
 
+    @Override
+    public RentObjectDto parseTheText(Message message) {
+        String text = message.getText();
+        List<String> textFromUser = new ArrayList<>();
+        String[] split = text.split("\n");
+        for (String o: split) {
+            if(o.equals("/post")){
+                continue;
+            }
+            String[] split1 = o.split(":");
+            textFromUser.add(split1[1]);
+        }
 
-    private SendMessage menuConstructor(Message message, List<String> name) {
+//        private String address;
+//        private String area;
+//        private String cityName;
+//        private List<String> photo;
+      return new RentObjectDto(message.getFrom().getId(),textFromUser.get(0),textFromUser.get(1),LocalDate.now(),Double.parseDouble(textFromUser.get(2)),true,textFromUser.get(3),textFromUser.get(4),textFromUser.get(5),null);
+
+    }
+
+    private String buildTheStringDescription(RentObjectDto o) {
+        return new StringBuilder()
+                .append("Description: ")
+                .append(o.getDescription())
+                .append("\n")
+                .append("Address: ")
+                .append(o.getAddress())
+                .append("\n")
+                .append("Price: ")
+                .append(o.getPrice())
+                .append("\n")
+                .append("Contacts: ")
+                .append(o.getContacts())
+                .toString();
+    }
+
+    private SendMessage menuConstructor(Message message, List<String> name, String messageText) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         // Создаем клавиуатуру
@@ -115,19 +190,16 @@ public class AbilitiesImplementation implements IBotAbilities {
         keyboard.add(keyboardFirstRow);
         keyboard.add(keyboardSecondRow);
         replyKeyboardMarkup.setKeyboard(keyboard);
-        sendMessage.setText("MENU");
+        sendMessage.setText(messageText);
         return sendMessage.setChatId(message.getChatId().toString());
 
     }
 
     private void mapFiller(HashMap<String, List<String>> map) {
         if (map.isEmpty()) {
-            map.put("SOUTH", new ArrayList<>());
-            map.put("CENTER", new ArrayList<>());
-            map.put("NORTH", new ArrayList<>());
-            map.get("SOUTH").addAll(Arrays.asList("BEER_SHEBA", "ASHDOD", "ASHKELON", "MAIN_MENU"));
-            map.get("NORTH").addAll(Arrays.asList("HAIFA", "AKKO", "NETANYA", "RAANANNA", "HERZLIA", "CEISARIA", "MAIN_MENU"));
-            map.get("CENTER").addAll(Arrays.asList("TEL_AVIV", "PETAH_TIKVA", "RAMAT_GAN", "MAIN_MENU"));
+            map.put(REGION_SOUTH, SOUTH_CITIES);
+            map.put(REGION_CENTER, CENTER_CITIES);
+            map.put(REGION_NORTH, NORTH_CITIES);
         }
     }
 

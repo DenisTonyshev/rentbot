@@ -18,5 +18,10 @@ public interface IBotAbilities {
 
     SendMessage sendRegionMenu(Message message);
 
+    SendMessage fillTheRentAD(Message message);
+
     List<SendPhoto> sendAllAds(Message message, List<RentObjectDto> ads);
+
+    RentObjectDto parseTheText(Message message);
+
 }
