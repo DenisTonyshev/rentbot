@@ -21,10 +21,11 @@ import static telegrammrentalbot.rentbot.constants.consts.*;
 
 @Component
 public class BotWorkingLogic extends TelegramLongPollingBot {
-
+    private RentObjectDto rentalAd;
     private int counter = 0;
     private IBotAbilities botDo = new AbilitiesImplementation();
     private IBotFillTheRentAD botFill = new FillTheRentForm();
+
     @Autowired
     IMongoDBService dataBase;
     @Autowired
@@ -67,59 +68,82 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                         //ВСТУПЛЕНИЕ И ПОЯСНЕНИЕ
                         case 0:
                             execute(botDo.sendMessageToUser(message, "ПОГНАЛИ В УВЛЕКАТЕЛЬНОЕ ПРИКЛЮЧЕНИЕ на 15 минут"));
+                            execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
+                            execute(botDo.sendMessageToUser(message, "Введи описание квартиры(дома) в формате Description(Описание): ВАШЕ ОПИСАНИЕ"));
                             counter++;
                             break;
                         //ВВОД ПЕРВОЙ ИНФЫ
                         case 1:
-                            execute(botDo.sendMessageToUser(message, "не забывай писать /post"));
-
+                            rentalAd = botFill.fillTheDescription(message);
+                            execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
+                            execute(botDo.sendMessageToUser(message, "Введи контакты в формате Contacts(контакты): ВАШИ КОНТАКТЫ"));
                             counter++;
                             break;
-
-
-
+                        case 2:
+                            rentalAd = botFill.fillTheContacts(message, rentalAd);
+                            execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
+                            execute(botDo.sendMessageToUser(message, "Введи цену Price(цена): ВАША ЦЕНА"));
+                            counter++;
+                            break;
+                        case 3:
+                            rentalAd = botFill.fillThePrice(message, rentalAd);
+                            execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
+                            execute(botDo.sendMessageToUser(message, "Введи адресс в формате Address(адрес): АДРЕС СДАЧИ"));
+                            counter++;
+                            break;
+                        case 4:
+                            rentalAd = botFill.fillTheAddress(message, rentalAd);
+                            execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
+                            execute(botDo.sendMessageToUser(message, "Введи район в формате Area(north,south,center): ВАШ РАЙОН"));
+                            counter++;
+                            break;
+                        case 5:
+                            rentalAd = botFill.fillTheArea(message, rentalAd);
+                            execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
+                            execute(botDo.sendMessageToUser(message, "Введи название города в формате City(город): ВАШ ГОРОД"));
+                            counter++;
+                            break;
+                        case 6:
+                            rentalAd = botFill.fillTheCityName(message, rentalAd);
+                            dataBase.createRent(rentalAd);
+                            counter = 0;
+                            break;
                     }
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-
-
             }
-
             //ADD NEW POST TO DataBase Primitive
-            if (message.getText().split("\n")[0].equals("/post")) {
-                if (counter > 1) {
-                    SendMessage msg = new SendMessage();
-                    msg.setText("НУ ВОТ ХУЛИ ТЫ ТЫЧИШЬ И ТЫЧИШЬ!");
-                    msg.setChatId(message.getChatId());
-                    counter = 0;
-                    try {
-                        execute(msg);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                }
-                try {
-                    if (counter == 1) {
-                        RentObjectDto rentObjectDto = botDo.parseTheText(message);
-                        rentObjectDto.setPhoto(new ArrayList<>());
-                        dataBase.createRent(rentObjectDto);
-                        SendMessage msg = new SendMessage();
-                        msg.setText("НУ ВОТ И ВСЁ, ПОТОМ БУДУТ ФОТО!");
-                        msg.setChatId(message.getChatId());
-                        execute(msg);
-                        counter = 0;
-                    } else if (counter == 0) {
-                        counter += 1;
-                        execute(botDo.fillTheRentAD(message));
-                    }
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+//            if (message.getText().split("\n")[0].equals("/post")) {
+//                if (counter > 1) {
+//                    SendMessage msg = new SendMessage();
+//                    msg.setText("НУ ВОТ ХУЛИ ТЫ ТЫЧИШЬ И ТЫЧИШЬ!");
+//                    msg.setChatId(message.getChatId());
+//                    counter = 0;
+//                    try {
+//                        execute(msg);
+//                    } catch (TelegramApiException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                try {
+//                    if (counter == 1) {
+//                        RentObjectDto rentObjectDto = botDo.parseTheText(message);
+//                        rentObjectDto.setPhoto(new ArrayList<>());
+//                        dataBase.createRent(rentObjectDto);
+//                        execute(botDo.sendMessageToUser(message,"Ну вот пока и всё"));
+//                        counter = 0;
+//                    } else if (counter == 0) {
+//                        counter += 1;
+//                        execute(botDo.fillTheRentAD(message));
+//                    }
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
 
 
 //            TEST_FILL_THE_BASE(message);
-            } else if (message.hasText())
+            else if (message.hasText())
                 try {
                     switch (message.getText()) {
                         case "NORTH":
