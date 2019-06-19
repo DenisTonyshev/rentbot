@@ -151,7 +151,8 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
     //ПРОВЕРКА ЗАПОЛНЕНИЯ БАЗЫ ОБЬЯВЛЕНИЙ
     //TODO Добавить проверку в 3,10,30 и 100 потоков
-    private void TEST_FILL_THE_BASE(Message message) {
+
+    public void TEST_FILL_THE_BASE(Message message) {
         List<String> paths = new ArrayList<>();
         paths.add("ФОТО ОБЪЕКТА ИЛИ ФОТОГРАФИИ, КОЛЛАЖ");
 

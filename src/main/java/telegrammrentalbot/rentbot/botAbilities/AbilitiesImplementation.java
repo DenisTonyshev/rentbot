@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static telegrammrentalbot.rentbot.constants.consts.*;
-import static telegrammrentalbot.rentbot.repo.iAmazonS3.Tatatata;
+//import static telegrammrentalbot.rentbot.repo.iAmazonS3.Tatatata;
 
 @Component
 public class AbilitiesImplementation implements IBotAbilities {
@@ -112,13 +112,13 @@ public class AbilitiesImplementation implements IBotAbilities {
             SendPhoto msg = new SendPhoto();
             try {
                 //=================================TODO
-                File tatatata = Tatatata();
+                String tatatata = "https://stickeroid.com/uploads/pic/full-tlgrmadd/thumb/stickeroid_5bf55072f275d.png";
                 //=================================^
                 msg.setChatId(message.getChatId())
                         .setPhoto(tatatata)
                         .setCaption(buildTheStringDescription(o));
                 rents.add(msg);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

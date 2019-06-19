@@ -10,4 +10,5 @@ public interface IMongoDBService {
     boolean delleteRent(Long id);
     List<RentObjectDto> allAreaRents(String area);
     List<RentObjectDto> allUserRents(long userId);
+    List<RentObjectDto> allCityRents(String cityName);
 }

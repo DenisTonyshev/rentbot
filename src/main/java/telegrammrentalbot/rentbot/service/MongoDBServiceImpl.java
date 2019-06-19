@@ -39,4 +39,10 @@ public class MongoDBServiceImpl implements IMongoDBService {
     public List<RentObjectDto> allUserRents(long userId) {
         return mongoDbRepo.findByUserId(userId);
     }
+
+    @Override
+    public List<RentObjectDto> allCityRents(String cityName) {
+        return mongoDbRepo.findByCityName(cityName);
+    }
+
 }

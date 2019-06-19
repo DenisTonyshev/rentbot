@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface MongoDbRepo extends MongoRepository<RentObjectDto,Long> {
     List<RentObjectDto> findByArea(String area);
+    List<RentObjectDto> findByCityName(String cityName);
     List<RentObjectDto> findByUserId(Long userid);
 }
