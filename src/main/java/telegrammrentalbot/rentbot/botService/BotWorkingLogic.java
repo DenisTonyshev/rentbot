@@ -108,6 +108,9 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                             dataBase.createRent(rentalAd);
                             counter = 0;
                             break;
+                        default:
+                            counter = 0;
+                            break;
                     }
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
