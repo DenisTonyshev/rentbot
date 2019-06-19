@@ -11,12 +11,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import telegrammrentalbot.rentbot.botAbilities.*;
 import telegrammrentalbot.rentbot.dto.*;
 import telegrammrentalbot.rentbot.service.*;
-
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
 import static telegrammrentalbot.rentbot.constants.consts.*;
 
 @Component
@@ -69,42 +67,43 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                         case 0:
                             execute(botDo.sendMessageToUser(message, "ПОГНАЛИ В УВЛЕКАТЕЛЬНОЕ ПРИКЛЮЧЕНИЕ на 15 минут"));
                             execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
-                            execute(botDo.sendMessageToUser(message, "Введи описание квартиры(дома) в формате Description(Описание): ВАШЕ ОПИСАНИЕ"));
+                            execute(botDo.sendMessageToUser(message, "Введи описание квартиры(дома)"));
                             counter++;
                             break;
                         //ВВОД ПЕРВОЙ ИНФЫ
                         case 1:
                             rentalAd = botFill.fillTheDescription(message);
                             execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
-                            execute(botDo.sendMessageToUser(message, "Введи контакты в формате Contacts(контакты): ВАШИ КОНТАКТЫ"));
+                            execute(botDo.sendMessageToUser(message, "Введи контакты для связи"));
                             counter++;
                             break;
                         case 2:
                             rentalAd = botFill.fillTheContacts(message, rentalAd);
                             execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
-                            execute(botDo.sendMessageToUser(message, "Введи цену Price(цена): ВАША ЦЕНА"));
+                            execute(botDo.sendMessageToUser(message, "Введи цену в Шекелях"));
                             counter++;
                             break;
                         case 3:
                             rentalAd = botFill.fillThePrice(message, rentalAd);
                             execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
-                            execute(botDo.sendMessageToUser(message, "Введи адресс в формате Address(адрес): АДРЕС СДАЧИ"));
+                            execute(botDo.sendMessageToUser(message, "Введи адресс в формате"));
                             counter++;
                             break;
                         case 4:
                             rentalAd = botFill.fillTheAddress(message, rentalAd);
                             execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
-                            execute(botDo.sendMessageToUser(message, "Введи район в формате Area(north,south,center): ВАШ РАЙОН"));
+                            execute(botDo.sendMessageToUser(message, "Введи район в формате"));
                             counter++;
                             break;
                         case 5:
                             rentalAd = botFill.fillTheArea(message, rentalAd);
                             execute(botDo.sendMessageToUser(message, "не забывай писать /post вверху"));
-                            execute(botDo.sendMessageToUser(message, "Введи название города в формате City(город): ВАШ ГОРОД"));
+                            execute(botDo.sendMessageToUser(message, "Введи название города в формате"));
                             counter++;
                             break;
                         case 6:
                             rentalAd = botFill.fillTheCityName(message, rentalAd);
+                            execute(botDo.sendMessageToUser(message, "Ну вот и умничка, а ты переживал"));
                             dataBase.createRent(rentalAd);
                             counter = 0;
                             break;
