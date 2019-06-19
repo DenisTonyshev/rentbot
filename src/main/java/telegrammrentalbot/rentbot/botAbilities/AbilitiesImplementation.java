@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static telegrammrentalbot.rentbot.constants.consts.*;
 import static telegrammrentalbot.rentbot.repo.iAmazonS3.Tatatata;
@@ -73,6 +72,14 @@ public class AbilitiesImplementation implements IBotAbilities {
     }
 
     @Override
+    public SendMessage sendMessageToUser(Message message, String text) {
+        SendMessage sm = new SendMessage();
+        sm.setChatId(message.getChatId());
+        sm.setText(text);
+        return sm;
+    }
+
+    @Override
     public SendMessage sendRegionMenu(Message message) {
         return menuConstructor(message, mapIsr.get(message.getText()), "CITIES");
     }
@@ -123,8 +130,8 @@ public class AbilitiesImplementation implements IBotAbilities {
         String text = message.getText();
         List<String> textFromUser = new ArrayList<>();
         String[] split = text.split("\n");
-        for (String o: split) {
-            if(o.equals("/post")){
+        for (String o : split) {
+            if (o.equals("/post")) {
                 continue;
             }
             String[] split1 = o.split(":");
@@ -133,7 +140,7 @@ public class AbilitiesImplementation implements IBotAbilities {
         Integer id = message.getFrom().getId();
         System.out.println(textFromUser);
         System.out.println(clientId);
-      return new RentObjectDto(clientId.getAndIncrement(),id,textFromUser.get(0).toLowerCase(),textFromUser.get(1),LocalDate.now(),Double.parseDouble(textFromUser.get(2)),true,textFromUser.get(3).toLowerCase(),textFromUser.get(4),textFromUser.get(5),null);
+        return new RentObjectDto(clientId.getAndIncrement(), id, textFromUser.get(0).toLowerCase(), textFromUser.get(1), LocalDate.now(), Double.parseDouble(textFromUser.get(2)), true, textFromUser.get(3).toLowerCase(), textFromUser.get(4), textFromUser.get(5), null);
     }
 
     private String buildTheStringDescription(RentObjectDto o) {

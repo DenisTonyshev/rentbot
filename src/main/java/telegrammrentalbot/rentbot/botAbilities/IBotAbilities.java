@@ -15,7 +15,7 @@ public interface IBotAbilities {
     Long sendTextMessageToUserById(String text, long userId);
     SendMessage sendButtonMenu(Map<String,List<String>> buttons, long userId);
     SendMessage sendMenu(Message msg);
-
+SendMessage sendMessageToUser(Message msg, String text);
     SendMessage sendRegionMenu(Message message);
 
     SendMessage fillTheRentAD(Message message);

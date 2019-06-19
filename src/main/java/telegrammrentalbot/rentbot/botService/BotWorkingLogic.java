@@ -24,7 +24,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
     private int counter = 0;
     private IBotAbilities botDo = new AbilitiesImplementation();
-
+    private IBotFillTheRentAD botFill = new FillTheRentForm();
     @Autowired
     IMongoDBService dataBase;
     @Autowired
@@ -60,8 +60,33 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                     message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
             userBase.addUser(user);
         } else {
-            //ADD NEW POST TO DB
+            //ADD NEW POST TO DATAbase AdvancedStepByStep
+            if (message.getText().split("\n")[0].equals("/post")) {
+                try {
+                    switch (counter) {
+                        //ВСТУПЛЕНИЕ И ПОЯСНЕНИЕ
+                        case 0:
+                            execute(botDo.sendMessageToUser(message, "ПОГНАЛИ В УВЛЕКАТЕЛЬНОЕ ПРИКЛЮЧЕНИЕ на 15 минут"));
+                            counter++;
+                            break;
+                        //ВВОД ПЕРВОЙ ИНФЫ
+                        case 1:
+                            execute(botDo.sendMessageToUser(message, "не забывай писать /post"));
 
+                            counter++;
+                            break;
+
+
+
+                    }
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            //ADD NEW POST TO DataBase Primitive
             if (message.getText().split("\n")[0].equals("/post")) {
                 if (counter > 1) {
                     SendMessage msg = new SendMessage();
@@ -91,6 +116,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+
 
 //            TEST_FILL_THE_BASE(message);
             } else if (message.hasText())
@@ -124,6 +150,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
     }
 
     //ПРОВЕРКА ЗАПОЛНЕНИЯ БАЗЫ ОБЬЯВЛЕНИЙ
+    //TODO Добавить проверку в 3,10,30 и 100 потоков
     private void TEST_FILL_THE_BASE(Message message) {
         List<String> paths = new ArrayList<>();
         paths.add("ФОТО ОБЪЕКТА ИЛИ ФОТОГРАФИИ, КОЛЛАЖ");
