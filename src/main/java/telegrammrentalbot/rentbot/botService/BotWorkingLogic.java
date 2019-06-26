@@ -53,14 +53,12 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
         Message message = update.getMessage();
-//        System.out.println(update.getCallbackQuery().getData());
         if (message.getText() != null && message.getText().equals("/start")) {
             UserDto user = new UserDto(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
                     message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode(), new RentObjectDto(), 0);
             userBase.addUser(user);
         } else {
             //ADD NEW POST TO DATAbase AdvancedStepByStep
-
             if ((message.getCaption() != null && message.getCaption().trim().substring(0, 5).equals("/post") && message.getText() == null) || message.getText().trim().substring(0, 5).equals("/post")) {
                 postTheRentalAd(message, userBase.getUserById(message.getFrom().getId()));
             } else if (message.hasText())

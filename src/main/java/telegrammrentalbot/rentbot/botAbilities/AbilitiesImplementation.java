@@ -10,12 +10,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import telegrammrentalbot.rentbot.dto.RentObjectDto;
 import telegrammrentalbot.rentbot.inLineBuilder.InlineKeyboardBuilder;
 import telegrammrentalbot.rentbot.service.*;
-
 import java.time.LocalDate;
 import java.util.*;
-
 import static telegrammrentalbot.rentbot.constants.consts.*;
-//import static telegrammrentalbot.rentbot.repo.iAmazonS3.Tatatata;
 
 @Component
 public class AbilitiesImplementation implements IBotAbilities {
@@ -109,9 +106,6 @@ public class AbilitiesImplementation implements IBotAbilities {
         for (RentObjectDto o : ads) {
             SendPhoto msg = new SendPhoto();
             try {
-                //=================================TODO
-//                File tatatata = Tatatata();
-                //=================================^
                 msg.setChatId(message.getChatId())
                         .setPhoto(o.getPhoto().get(0))
                         .setCaption(buildTheStringDescription(o));
