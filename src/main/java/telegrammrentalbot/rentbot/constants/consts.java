@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public interface consts {
-    AtomicLong clientId = new AtomicLong(0);
+    AtomicLong advId = new AtomicLong(0);
     String REGION_SOUTH = "SOUTH";
     String REGION_NORTH = "NORTH";
     String REGION_CENTER = "CENTER";

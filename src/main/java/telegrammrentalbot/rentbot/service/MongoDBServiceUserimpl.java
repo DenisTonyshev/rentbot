@@ -34,4 +34,15 @@ public class MongoDBServiceUserimpl implements IMongoDBUserService {
     public List<UserDto> allUsers() {
         return mongoDBUserRepo.findAll();
     }
+
+    @Override
+    public UserDto getUserById(long id) {
+        //TODO написать метод получения пользователя.
+        return null;
+    }
+
+    @Override
+    public void saveTheUpdate(UserDto user) {
+        mongoDBUserRepo.save(user);
+    }
 }

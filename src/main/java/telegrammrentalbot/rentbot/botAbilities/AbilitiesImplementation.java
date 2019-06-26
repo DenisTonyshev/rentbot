@@ -11,8 +11,6 @@ import telegrammrentalbot.rentbot.dto.RentObjectDto;
 import telegrammrentalbot.rentbot.inLineBuilder.InlineKeyboardBuilder;
 import telegrammrentalbot.rentbot.service.*;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -139,8 +137,8 @@ public class AbilitiesImplementation implements IBotAbilities {
         }
         Integer id = message.getFrom().getId();
         System.out.println(textFromUser);
-        System.out.println(clientId);
-        return new RentObjectDto(clientId.getAndIncrement(), id, textFromUser.get(0).toLowerCase(), textFromUser.get(1), LocalDate.now(), Double.parseDouble(textFromUser.get(2)), true, textFromUser.get(3).toLowerCase(), textFromUser.get(4), textFromUser.get(5), null);
+        System.out.println(advId);
+        return new RentObjectDto(advId.getAndIncrement(), id, textFromUser.get(0).toLowerCase(), textFromUser.get(1), LocalDate.now(), Double.parseDouble(textFromUser.get(2)), true, textFromUser.get(3).toLowerCase(), textFromUser.get(4), textFromUser.get(5), null);
     }
 
     private String buildTheStringDescription(RentObjectDto o) {

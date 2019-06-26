@@ -8,5 +8,7 @@ public interface IMongoDBUserService {
     void addUser(UserDto user);
     void removeUser(Long userId);
     List<UserDto> allUsers();
+    UserDto getUserById(long id);
+    void saveTheUpdate(UserDto user);
 
 }

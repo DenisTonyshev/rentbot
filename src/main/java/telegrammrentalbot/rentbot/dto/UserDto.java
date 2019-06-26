@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,31 +15,10 @@ public class UserDto {
     private long id;
     private String name;
     private boolean isBot;
-    private String lastname;
+    private String lastName;
     private String userName;
     private String languageCode;
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isBot() {
-        return isBot;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getLanguageCode() {
-        return languageCode;
-    }
+//TODO МОЖЕТ ОСТАВИТЬ НЕ ЛИСТ А МАП, ДЛЯ ПОИСКА ОБЯВЫ, А ТО ЧЕТ ЗАШКВАР ПОТОМ КАК ПРОВЕРИШЬ КАКАЯ ОБЯВА КОСЯЧНАЯ.
+    private RentObjectDto rentalAd;
+    private int counter;
 }

@@ -5,6 +5,7 @@ import telegrammrentalbot.rentbot.dto.RentObjectDto;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static telegrammrentalbot.rentbot.constants.consts.*;
 
@@ -12,65 +13,83 @@ public class FillTheRentForm implements IBotFillTheRentAD {
 
     @Override
     public RentObjectDto fillTheDescription(Message msg) {
-        RentObjectDto user = new RentObjectDto();
-        user.setId(clientId.getAndIncrement());
-        user.setActive(true);
-        user.setPostDate(LocalDate.now());
+        RentObjectDto rentalAd = new RentObjectDto();
+        rentalAd.setId((long)ThreadLocalRandom.current().ints(100000, 999999).findFirst().getAsInt());
+        rentalAd.setActive(false);
+        rentalAd.setPostDate(LocalDate.now());
         //ВЫНЕСТИ ОТДЕЛЬНО ФОТО
-        user.setPhoto(new ArrayList<>());
+        rentalAd.setPhoto(new ArrayList<>());
 
-        Integer userid = msg.getFrom().getId();
-        user.setUserId(userid);
-        String text = msg.getText();
-        String description = text.substring(6).trim();
+        rentalAd.setUserId(msg.getFrom().getId());
+        String text = msg.getText().trim();
+        String description = text.substring(5).trim();
+        if(description.equals("")){
+            return null;
+        }
         System.out.println(description);
-        user.setDescription(description);
-        return user;
+        rentalAd.setDescription(description);
+        return rentalAd;
     }
 
     @Override
-    public RentObjectDto fillTheContacts(Message msg, RentObjectDto user) {
-        String text = msg.getText();
-        String contacts = text.substring(6).trim();
-        user.setContacts(contacts);
-        return user;
+    public RentObjectDto fillTheContacts(Message msg, RentObjectDto rentalAd) {
+        String text = msg.getText().trim();
+        String contacts = text.substring(5).trim();
+        if(contacts.equals("")){
+            return null;
+        }
+        rentalAd.setContacts(contacts);
+        return rentalAd;
     }
 
     @Override
-    public RentObjectDto fillThePrice(Message msg, RentObjectDto user) {
-        String text = msg.getText();
-        String price = text.substring(6).trim();
+    public RentObjectDto fillThePrice(Message msg, RentObjectDto rentalAd) {
+        String text = msg.getText().trim();
+        String price = text.substring(5).trim();
+        if(price.equals("")){
+            return null;
+        }
         double price1 = 0;
         try {
             price1 = Double.parseDouble(price);
-            user.setPrice(price1);
+            rentalAd.setPrice(price1);
         } catch (NumberFormatException e) {
-            user.setPrice(price1);
+            rentalAd.setPrice(price1);
         }
-        return user;
+        return rentalAd;
     }
 
     @Override
-    public RentObjectDto fillTheAddress(Message msg, RentObjectDto user) {
-        String text = msg.getText();
-        String address = text.substring(6).trim();
-        user.setAddress(address);
-        return user;
+    public RentObjectDto fillTheAddress(Message msg, RentObjectDto rentalAd) {
+        String text = msg.getText().trim();
+        String address = text.substring(5).trim();
+        if(address.equals("")){
+            return null;
+        }
+        rentalAd.setAddress(address);
+        return rentalAd;
     }
 
     @Override
-    public RentObjectDto fillTheArea(Message msg, RentObjectDto user) {
-        String text = msg.getText();
-        String area = text.substring(6).trim();
-        user.setArea(area);
-        return user;
+    public RentObjectDto fillTheArea(Message msg, RentObjectDto rentalAd) {
+        String text = msg.getText().trim();
+        String area = text.substring(5).trim();
+        if(area.equals("")){
+            return null;
+        }
+        rentalAd.setArea(area);
+        return rentalAd;
     }
 
     @Override
-    public RentObjectDto fillTheCityName(Message msg, RentObjectDto user) {
-        String text = msg.getText();
-        String citName = text.substring(6).trim();
-        user.setCityName(citName);
-        return user;
+    public RentObjectDto fillTheCityName(Message msg, RentObjectDto rentalAd) {
+        String text = msg.getText().trim();
+        String citName = text.substring(5).trim();
+        if(citName.equals("")){
+            return null;
+        }
+        rentalAd.setCityName(citName);
+        rentalAd.setActive(true);
+        return rentalAd;
     }
 }

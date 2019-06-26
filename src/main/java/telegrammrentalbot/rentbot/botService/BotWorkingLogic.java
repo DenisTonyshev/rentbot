@@ -11,16 +11,18 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import telegrammrentalbot.rentbot.botAbilities.*;
 import telegrammrentalbot.rentbot.dto.*;
 import telegrammrentalbot.rentbot.service.*;
+
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
 import static telegrammrentalbot.rentbot.constants.consts.*;
 
 @Component
 public class BotWorkingLogic extends TelegramLongPollingBot {
-    private RentObjectDto rentalAd;
-    private int counter = 0;
+
+
     private IBotAbilities botDo = new AbilitiesImplementation();
     private IBotFillTheRentAD botFill = new FillTheRentForm();
 
@@ -56,64 +58,12 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 //        System.out.println(update.getCallbackQuery().getData());
         if (message.getText().equals("/start")) {
             UserDto user = new UserDto(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
-                    message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode());
+                    message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode(), new RentObjectDto(), 0);
             userBase.addUser(user);
         } else {
             //ADD NEW POST TO DATAbase AdvancedStepByStep
-            if (message.getText().substring(0,6).equals("/post")) {
-                try {
-                    switch (counter) {
-                        //ВСТУПЛЕНИЕ И ПОЯСНЕНИЕ
-                        case 0:
-                            execute(botDo.sendMessageToUser(message, "ПОГНАЛИ В УВЛЕКАТЕЛЬНОЕ ПРИКЛЮЧЕНИЕ на 15 минут"));
-                            execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
-                            execute(botDo.sendMessageToUser(message, "Введи описание квартиры(дома)"));
-                            counter++;
-                            break;
-                        //ВВОД ПЕРВОЙ ИНФЫ
-                        case 1:
-                            rentalAd = botFill.fillTheDescription(message);
-                            execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
-                            execute(botDo.sendMessageToUser(message, "Введи контакты для связи"));
-                            counter++;
-                            break;
-                        case 2:
-                            rentalAd = botFill.fillTheContacts(message, rentalAd);
-                            execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
-                            execute(botDo.sendMessageToUser(message, "Введи цену в Шекелях"));
-                            counter++;
-                            break;
-                        case 3:
-                            rentalAd = botFill.fillThePrice(message, rentalAd);
-                            execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
-                            execute(botDo.sendMessageToUser(message, "Введи адресс в формате"));
-                            counter++;
-                            break;
-                        case 4:
-                            rentalAd = botFill.fillTheAddress(message, rentalAd);
-                            execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
-                            execute(botDo.sendMessageToUser(message, "Введи район в формате"));
-                            counter++;
-                            break;
-                        case 5:
-                            rentalAd = botFill.fillTheArea(message, rentalAd);
-                            execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
-                            execute(botDo.sendMessageToUser(message, "Введи название города в формате"));
-                            counter++;
-                            break;
-                        case 6:
-                            counter = 0;
-                            rentalAd = botFill.fillTheCityName(message, rentalAd);
-                            execute(botDo.sendMessageToUser(message, "Ну вот и умничка, а ты переживал"));
-                            dataBase.createRent(rentalAd);
-                            break;
-                        default:
-                            counter = 0;
-                            break;
-                    }
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+            if (message.getText().trim().substring(0, 5).equals("/post")) {
+                postTheRentalAd(message, userBase.getUserById(message.getFrom().getId()));
             }
             //ADD NEW POST TO DataBase Primitive
 //            if (message.getText().split("\n")[0].equals("/post")) {
@@ -163,7 +113,6 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                                 execute(o);
                             }
                         default:
-                            counter = 0;
                             System.out.println(message.getText());
                             execute(botDo.sendMenu(message));
                             break;
@@ -175,6 +124,80 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
         }
     }
 
+    private void postTheRentalAd(Message message, UserDto user) {
+        int counter = user.getCounter();
+        RentObjectDto rentalAd = user.getRentalAd();
+        try {
+            switch (counter) {
+                //ВСТУПЛЕНИЕ И ПОЯСНЕНИЕ
+                case 0:
+                    execute(botDo.sendMessageToUser(message, "ПОГНАЛИ В УВЛЕКАТЕЛЬНОЕ ПРИКЛЮЧЕНИЕ на 15 минут"));
+                    execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
+                    execute(botDo.sendMessageToUser(message, "Введи описание квартиры(дома)"));
+                    user.setCounter(++counter);
+                    userBase.saveTheUpdate(user);
+                    break;
+                //ВВОД ПЕРВОЙ ИНФЫ
+                case 1:
+                    rentalAd = botFill.fillTheDescription(message);
+                    execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
+                    execute(botDo.sendMessageToUser(message, "Введи контакты для связи"));
+                    user.setCounter(++counter);
+                    user.setRentalAd(rentalAd);
+                    userBase.saveTheUpdate(user);
+                    break;
+                case 2:
+                    rentalAd = botFill.fillTheContacts(message, rentalAd);
+                    execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
+                    execute(botDo.sendMessageToUser(message, "Введи цену в Шекелях"));
+                    user.setCounter(++counter);
+                    user.setRentalAd(rentalAd);
+                    userBase.saveTheUpdate(user);
+                    break;
+                case 3:
+                    rentalAd = botFill.fillThePrice(message, rentalAd);
+                    execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
+                    execute(botDo.sendMessageToUser(message, "Введи адресс"));
+                    user.setCounter(++counter);
+                    user.setRentalAd(rentalAd);
+                    userBase.saveTheUpdate(user);
+                    break;
+                case 4:
+                    rentalAd = botFill.fillTheAddress(message, rentalAd);
+                    execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
+                    execute(botDo.sendMessageToUser(message, "Введи район в формате north, south, center"));
+                    user.setCounter(++counter);
+                    user.setRentalAd(rentalAd);
+                    userBase.saveTheUpdate(user);
+                    break;
+                case 5:
+                    rentalAd = botFill.fillTheArea(message, rentalAd);
+                    execute(botDo.sendMessageToUser(message, "не забывай писать /post в начале"));
+                    execute(botDo.sendMessageToUser(message, "Введи название города"));
+                    user.setCounter(++counter);
+                    user.setRentalAd(rentalAd);
+                    userBase.saveTheUpdate(user);
+                    break;
+                case 6:
+                    rentalAd = botFill.fillTheCityName(message, rentalAd);
+                    execute(botDo.sendMessageToUser(message, "Ну вот и умничка, а ты переживал"));
+                    dataBase.createRent(rentalAd);
+                    user.setCounter(0);
+                    user.setRentalAd(new RentObjectDto());
+                    userBase.saveTheUpdate(user);
+                    break;
+                default:
+                    user.setCounter(0);
+                    userBase.saveTheUpdate(user);
+                    break;
+            }
+        } catch (TelegramApiException | NullPointerException e) {
+            user.setCounter(0);
+            userBase.saveTheUpdate(user);
+            e.printStackTrace();
+        }
+    }
+
     //ПРОВЕРКА ЗАПОЛНЕНИЯ БАЗЫ ОБЬЯВЛЕНИЙ
     //TODO Добавить проверку в 3,10,30 и 100 потоков
     private void TEST_FILL_THE_BASE(Message message) {
@@ -183,7 +206,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
         for (int i = 1; i < 11; i++) {
             RentObjectDto objectDto = new RentObjectDto();
-            objectDto.setId(clientId.getAndIncrement());
+            objectDto.setId(advId.getAndIncrement());
             objectDto.setUserId(message.getFrom().getId());
             objectDto.setDescription("Большая" + i + " комнатная квартира,полнoстью мебелираванная с большой обустроенной крышей");
             objectDto.setContacts("+972053" + (i - 1) + ThreadLocalRandom.current().ints(100000, 999999).findFirst().getAsInt());
