@@ -2,6 +2,7 @@ package telegrammrentalbot.rentbot.botAbilities;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 import telegrammrentalbot.rentbot.dto.RentObjectDto;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ public class FillTheRentForm implements IBotFillTheRentAD {
     @Override
     public RentObjectDto fillTheDescription(Message msg) {
         RentObjectDto rentalAd = new RentObjectDto();
-        rentalAd.setId((long)ThreadLocalRandom.current().ints(100000, 999999).findFirst().getAsInt());
+        rentalAd.setId((long) ThreadLocalRandom.current().ints(100000, 999999).findFirst().getAsInt());
         rentalAd.setActive(false);
         rentalAd.setPostDate(LocalDate.now());
         //ВЫНЕСТИ ОТДЕЛЬНО ФОТО
@@ -23,7 +24,7 @@ public class FillTheRentForm implements IBotFillTheRentAD {
         rentalAd.setUserId(msg.getFrom().getId());
         String text = msg.getText().trim();
         String description = text.substring(5).trim();
-        if(description.equals("")){
+        if (description.equals("")) {
             return null;
         }
         System.out.println(description);
@@ -35,26 +36,28 @@ public class FillTheRentForm implements IBotFillTheRentAD {
     public RentObjectDto fillTheContacts(Message msg, RentObjectDto rentalAd) {
         String text = msg.getText().trim();
         String contacts = text.substring(5).trim();
-        if(contacts.equals("")){
-            return null;
+        if (contacts.equals("")) {
+            rentalAd.setContacts("NO CONTACTS");
+        } else {
+            rentalAd.setContacts(contacts);
         }
-        rentalAd.setContacts(contacts);
         return rentalAd;
     }
 
     @Override
     public RentObjectDto fillThePrice(Message msg, RentObjectDto rentalAd) {
+        double price1 = 0;
         String text = msg.getText().trim();
         String price = text.substring(5).trim();
-        if(price.equals("")){
-            return null;
-        }
-        double price1 = 0;
-        try {
-            price1 = Double.parseDouble(price);
-            rentalAd.setPrice(price1);
-        } catch (NumberFormatException e) {
-            rentalAd.setPrice(price1);
+        if (price.equals("")) {
+            rentalAd.setPrice(0);
+        } else {
+            try {
+                price1 = Double.parseDouble(price);
+                rentalAd.setPrice(price1);
+            } catch (NumberFormatException e) {
+                rentalAd.setPrice(price1);
+            }
         }
         return rentalAd;
     }
@@ -63,10 +66,11 @@ public class FillTheRentForm implements IBotFillTheRentAD {
     public RentObjectDto fillTheAddress(Message msg, RentObjectDto rentalAd) {
         String text = msg.getText().trim();
         String address = text.substring(5).trim();
-        if(address.equals("")){
-            return null;
+        if (address.equals("")) {
+            rentalAd.setAddress("NO ADDRESS");
+        } else {
+            rentalAd.setAddress(address);
         }
-        rentalAd.setAddress(address);
         return rentalAd;
     }
 
@@ -74,10 +78,11 @@ public class FillTheRentForm implements IBotFillTheRentAD {
     public RentObjectDto fillTheArea(Message msg, RentObjectDto rentalAd) {
         String text = msg.getText().trim();
         String area = text.substring(5).trim();
-        if(area.equals("")){
-            return null;
+        if (area.equals("")) {
+            rentalAd.setAddress("NO AREA");
+        } else {
+            rentalAd.setArea(area);
         }
-        rentalAd.setArea(area);
         return rentalAd;
     }
 
@@ -85,11 +90,12 @@ public class FillTheRentForm implements IBotFillTheRentAD {
     public RentObjectDto fillTheCityName(Message msg, RentObjectDto rentalAd) {
         String text = msg.getText().trim();
         String citName = text.substring(5).trim();
-        if(citName.equals("")){
-            return null;
+        if (citName.equals("")) {
+            rentalAd.setAddress("NO CITY_NAME");
+        } else {
+            rentalAd.setCityName(citName);
+            rentalAd.setActive(true);
         }
-        rentalAd.setCityName(citName);
-        rentalAd.setActive(true);
         return rentalAd;
     }
 }

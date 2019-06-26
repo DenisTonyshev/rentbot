@@ -181,7 +181,9 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                 case 6:
                     rentalAd = botFill.fillTheCityName(message, rentalAd);
                     execute(botDo.sendMessageToUser(message, "Ну вот и умничка, а ты переживал"));
-                    dataBase.createRent(rentalAd);
+                    if (rentalAd.isActive() && rentalAd.getPrice() != 0 && !rentalAd.getContacts().equals("NO CONTACTS")) {
+                        dataBase.createRent(rentalAd);
+                    }
                     user.setCounter(0);
                     user.setRentalAd(new RentObjectDto());
                     userBase.saveTheUpdate(user);
