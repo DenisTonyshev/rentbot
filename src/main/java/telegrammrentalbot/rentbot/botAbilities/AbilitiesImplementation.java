@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static telegrammrentalbot.rentbot.constants.consts.*;
-import static telegrammrentalbot.rentbot.repo.iAmazonS3.Tatatata;
+//import static telegrammrentalbot.rentbot.repo.iAmazonS3.Tatatata;
 
 @Component
 public class AbilitiesImplementation implements IBotAbilities {
