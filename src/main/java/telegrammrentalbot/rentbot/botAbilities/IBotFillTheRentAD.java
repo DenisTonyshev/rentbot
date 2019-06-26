@@ -26,7 +26,9 @@ import telegrammrentalbot.rentbot.dto.*;
 //private String cityName;
 //private List<String> photo;
 public interface IBotFillTheRentAD {
-    RentObjectDto fillTheDescription(Message msg);
+
+    RentObjectDto fillTheDescription(Message msg, RentObjectDto rentalAd);
+
     RentObjectDto fillTheContacts(Message msg, RentObjectDto user);
     RentObjectDto fillThePrice(Message msg, RentObjectDto user);
     RentObjectDto fillTheAddress(Message msg, RentObjectDto user);

@@ -13,22 +13,19 @@ import static telegrammrentalbot.rentbot.constants.consts.*;
 public class FillTheRentForm implements IBotFillTheRentAD {
 
     @Override
-    public RentObjectDto fillTheDescription(Message msg) {
-        RentObjectDto rentalAd = new RentObjectDto();
+    public RentObjectDto fillTheDescription(Message msg, RentObjectDto rentalAd) {
         rentalAd.setId((long) ThreadLocalRandom.current().ints(100000, 999999).findFirst().getAsInt());
-        rentalAd.setActive(false);
         rentalAd.setPostDate(LocalDate.now());
         //ВЫНЕСТИ ОТДЕЛЬНО ФОТО
         rentalAd.setPhoto(new ArrayList<>());
-
         rentalAd.setUserId(msg.getFrom().getId());
         String text = msg.getText().trim();
         String description = text.substring(5).trim();
         if (description.equals("")) {
-            return null;
+            rentalAd.setContacts("NO DESCRIPTION");
+        } else {
+            rentalAd.setDescription(description);
         }
-        System.out.println(description);
-        rentalAd.setDescription(description);
         return rentalAd;
     }
 
