@@ -34,4 +34,5 @@ public interface IBotFillTheRentAD {
     RentObjectDto fillTheAddress(Message msg, RentObjectDto user);
     RentObjectDto fillTheArea(Message msg, RentObjectDto user);
     RentObjectDto fillTheCityName(Message msg, RentObjectDto user);
+    RentObjectDto fillThePhoto(Message msg, RentObjectDto user);
 }

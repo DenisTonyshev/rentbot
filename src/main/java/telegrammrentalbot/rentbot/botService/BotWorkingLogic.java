@@ -22,7 +22,6 @@ import static telegrammrentalbot.rentbot.constants.consts.*;
 @Component
 public class BotWorkingLogic extends TelegramLongPollingBot {
 
-
     private IBotAbilities botDo = new AbilitiesImplementation();
     private IBotFillTheRentAD botFill = new FillTheRentForm();
 
@@ -30,7 +29,6 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
     IMongoDBService dataBase;
     @Autowired
     IMongoDBUserService userBase;
-
 
     @PostConstruct
     private void registerBot() {
@@ -56,46 +54,16 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
 
         Message message = update.getMessage();
 //        System.out.println(update.getCallbackQuery().getData());
-        if (message.getText().equals("/start")) {
+        if (message.getText() != null && message.getText().equals("/start")) {
             UserDto user = new UserDto(message.getFrom().getId(), message.getFrom().getFirstName(), message.getFrom().getBot(),
                     message.getFrom().getLastName(), message.getFrom().getUserName(), message.getFrom().getLanguageCode(), new RentObjectDto(), 0);
             userBase.addUser(user);
         } else {
             //ADD NEW POST TO DATAbase AdvancedStepByStep
-            if (message.getText().trim().substring(0, 5).equals("/post")) {
+
+            if ((message.getCaption() != null && message.getCaption().trim().substring(0, 5).equals("/post") && message.getText() == null) || message.getText().trim().substring(0, 5).equals("/post")) {
                 postTheRentalAd(message, userBase.getUserById(message.getFrom().getId()));
-            }
-            //ADD NEW POST TO DataBase Primitive
-//            if (message.getText().split("\n")[0].equals("/post")) {
-//                if (counter > 1) {
-//                    SendMessage msg = new SendMessage();
-//                    msg.setText("НУ ВОТ ХУЛИ ТЫ ТЫЧИШЬ И ТЫЧИШЬ!");
-//                    msg.setChatId(message.getChatId());
-//                    counter = 0;
-//                    try {
-//                        execute(msg);
-//                    } catch (TelegramApiException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                try {
-//                    if (counter == 1) {
-//                        RentObjectDto rentObjectDto = botDo.parseTheText(message);
-//                        rentObjectDto.setPhoto(new ArrayList<>());
-//                        dataBase.createRent(rentObjectDto);
-//                        execute(botDo.sendMessageToUser(message,"Ну вот пока и всё"));
-//                        counter = 0;
-//                    } else if (counter == 0) {
-//                        counter += 1;
-//                        execute(botDo.fillTheRentAD(message));
-//                    }
-//                } catch (TelegramApiException e) {
-//                    e.printStackTrace();
-//                }
-
-
-//            TEST_FILL_THE_BASE(message);
-            else if (message.hasText())
+            } else if (message.hasText())
                 try {
                     switch (message.getText()) {
                         case "NORTH":
@@ -209,8 +177,19 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                         user.setCounter(0);
                     } else {
                         rentalAd = botFill.fillTheCityName(message, rentalAd);
+                        user.setCounter(++counter);
+                        user.setRentalAd(rentalAd);
+                        execute(botDo.sendMessageToUser(message, "А теперь пришли фотографию с подписью /post"));
+                    }
+                    userBase.saveTheUpdate(user);
+                    break;
+                case 7:
+                    if (message.getCaption() == null || message.getCaption().trim().equals("")) {
+                        execute(botDo.sendMessageToUser(message, "Ты ввел пустую строку, начни с начала"));
+                        user.setCounter(0);
+                    } else {
+                        rentalAd = botFill.fillThePhoto(message, rentalAd);
                         if (rentalAd.isActive() && rentalAd.getPrice() != 0 && !rentalAd.getContacts().equals("NO CONTACTS")) {
-                            execute(botDo.sendMessageToUser(message, "Ну вот и умничка, а ты переживал"));
                             dataBase.createRent(rentalAd);
                             user.setCounter(0);
                             user.setRentalAd(new RentObjectDto());
@@ -222,6 +201,7 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                     }
                     userBase.saveTheUpdate(user);
                     break;
+
                 default:
                     user.setCounter(0);
                     user.setRentalAd(new RentObjectDto());
@@ -229,11 +209,13 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                     userBase.saveTheUpdate(user);
                     break;
             }
-        } catch (TelegramApiException | NullPointerException e) {
+        } catch (TelegramApiException |
+                NullPointerException e) {
             user.setCounter(0);
             userBase.saveTheUpdate(user);
             e.printStackTrace();
         }
+
     }
 
     //ПРОВЕРКА ЗАПОЛНЕНИЯ БАЗЫ ОБЬЯВЛЕНИЙ

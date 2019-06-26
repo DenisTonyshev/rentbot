@@ -1,11 +1,13 @@
 package telegrammrentalbot.rentbot.botAbilities;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import telegrammrentalbot.rentbot.dto.RentObjectDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static telegrammrentalbot.rentbot.constants.consts.*;
@@ -91,8 +93,18 @@ public class FillTheRentForm implements IBotFillTheRentAD {
             rentalAd.setAddress("NO CITY_NAME");
         } else {
             rentalAd.setCityName(citName.toUpperCase());
-            rentalAd.setActive(true);
         }
         return rentalAd;
     }
+
+    @Override
+    public RentObjectDto fillThePhoto(Message msg, RentObjectDto rentalAd) {
+        if (rentalAd.getPhoto() == null) {
+            rentalAd.setPhoto(new ArrayList<>());
+        }
+        rentalAd.getPhoto().add(msg.getPhoto().get(0).getFileId());
+        rentalAd.setActive(true);
+        return rentalAd;
+    }
+
 }

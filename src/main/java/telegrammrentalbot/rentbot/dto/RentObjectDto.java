@@ -24,5 +24,5 @@ public class RentObjectDto {
     private String address;
     private String area;
     private String cityName;
-    private List<String> photo;
+    private List<String> photo = new ArrayList<>();
 }

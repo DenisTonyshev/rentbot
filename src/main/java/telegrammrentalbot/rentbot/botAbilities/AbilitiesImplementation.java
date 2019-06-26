@@ -113,7 +113,7 @@ public class AbilitiesImplementation implements IBotAbilities {
 //                File tatatata = Tatatata();
                 //=================================^
                 msg.setChatId(message.getChatId())
-                        .setPhoto("https://stickeroid.com/uploads/pic/full-tlgrmadd/thumb/stickeroid_5bf55072f275d.png")
+                        .setPhoto(o.getPhoto().get(0))
                         .setCaption(buildTheStringDescription(o));
                 rents.add(msg);
             } catch (Exception e) {
