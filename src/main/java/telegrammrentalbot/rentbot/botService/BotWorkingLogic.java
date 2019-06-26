@@ -188,6 +188,8 @@ public class BotWorkingLogic extends TelegramLongPollingBot {
                     break;
                 default:
                     user.setCounter(0);
+                    user.setRentalAd(new RentObjectDto());
+                    execute(botDo.sendMessageToUser(message, "Мы сбросили твое обьявление, начни сначала"));
                     userBase.saveTheUpdate(user);
                     break;
             }
