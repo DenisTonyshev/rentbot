@@ -78,7 +78,7 @@ public class FillTheRentForm implements IBotFillTheRentAD {
         if (area.equals("")) {
             rentalAd.setAddress("NO AREA");
         } else {
-            rentalAd.setArea(area);
+            rentalAd.setArea(area.toUpperCase());
         }
         return rentalAd;
     }
@@ -90,7 +90,7 @@ public class FillTheRentForm implements IBotFillTheRentAD {
         if (citName.equals("")) {
             rentalAd.setAddress("NO CITY_NAME");
         } else {
-            rentalAd.setCityName(citName);
+            rentalAd.setCityName(citName.toUpperCase());
             rentalAd.setActive(true);
         }
         return rentalAd;
