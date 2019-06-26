@@ -18,7 +18,6 @@ public class UserDto {
     private String lastName;
     private String userName;
     private String languageCode;
-//TODO МОЖЕТ ОСТАВИТЬ НЕ ЛИСТ А МАП, ДЛЯ ПОИСКА ОБЯВЫ, А ТО ЧЕТ ЗАШКВАР ПОТОМ КАК ПРОВЕРИШЬ КАКАЯ ОБЯВА КОСЯЧНАЯ.
     private RentObjectDto rentalAd;
     private int counter;
 }

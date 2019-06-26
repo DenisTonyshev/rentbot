@@ -34,8 +34,7 @@ public class MongoDBServiceUserimpl implements IMongoDBUserService {
 
     @Override
     public UserDto getUserById(long id) {
-        //TODO написать метод получения пользователя.
-        return null;
+        return mongoDBUserRepo.findById(id).orElse(null);
     }
 
     @Override
